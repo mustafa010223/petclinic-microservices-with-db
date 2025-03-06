@@ -1,5 +1,5 @@
 provider "aws" {
-  region  = "us-east-1"
+  region = "us-east-1"
 }
 
 variable "sec-gr-k8s" {
@@ -11,8 +11,8 @@ data "aws_vpc" "name" {
 }
 
 resource "aws_security_group" "k8s-sec-gr" {
-  name    = var.sec-gr-k8s
-  vpc_id  = data.aws_vpc.name.id
+  name   = var.sec-gr-k8s
+  vpc_id = data.aws_vpc.name.id
   tags = {
     Name = var.sec-gr-k8s
   }
@@ -83,13 +83,13 @@ resource "aws_iam_instance_profile" "petclinic-master-server-profile" {
 }
 
 resource "aws_instance" "kube-master" {
-  ami                  = "ami-005fc0f236362e99f"
-  instance_type        = "t3a.medium"
-  iam_instance_profile = aws_iam_instance_profile.petclinic-master-server-profile.name
+  ami                    = "ami-005fc0f236362e99f"
+  instance_type          = "t3a.medium"
+  iam_instance_profile   = aws_iam_instance_profile.petclinic-master-server-profile.name
   vpc_security_group_ids = [aws_security_group.k8s-sec-gr.id]
-  key_name             = "clarus"
-  subnet_id            = "subnet-c41ba589"  # Kendi us-east-1a subnet_id'nizi girin
-  availability_zone    = "us-east-1a"
+  key_name               = "clarus"
+  subnet_id              = "subnet-0f717b0f246d603f2bu"  # Güncel subnet ID
+  availability_zone      = "us-east-1a"
   tags = {
     Name        = "kube-master"
     Project     = "tera-kube-ans"
@@ -100,12 +100,12 @@ resource "aws_instance" "kube-master" {
 }
 
 resource "aws_instance" "worker-1" {
-  ami                  = "ami-005fc0f236362e99f"
-  instance_type        = "t3a.medium"
+  ami                    = "ami-005fc0f236362e99f"
+  instance_type          = "t3a.medium"
   vpc_security_group_ids = [aws_security_group.k8s-sec-gr.id]
-  key_name             = "clarus"
-  subnet_id            = "subnet-c41ba589"  # Kendi us-east-1a subnet_id'nizi girin
-  availability_zone    = "us-east-1a"
+  key_name               = "clarus"
+  subnet_id              = "subnet-0f717b0f246d603f2bu"  # Güncel subnet ID
+  availability_zone      = "us-east-1a"
   tags = {
     Name        = "worker-1"
     Project     = "tera-kube-ans"
@@ -116,12 +116,12 @@ resource "aws_instance" "worker-1" {
 }
 
 resource "aws_instance" "worker-2" {
-  ami                  = "ami-005fc0f236362e99f"
-  instance_type        = "t3a.medium"
+  ami                    = "ami-005fc0f236362e99f"
+  instance_type          = "t3a.medium"
   vpc_security_group_ids = [aws_security_group.k8s-sec-gr.id]
-  key_name             = "clarus"
-  subnet_id            = "subnet-c41ba589"  # Kendi us-east-1a subnet_id'nizi girin
-  availability_zone    = "us-east-1a"
+  key_name               = "clarus"
+  subnet_id              = "subnet-0f717b0f246d603f2bu"  # Güncel subnet ID
+  availability_zone      = "us-east-1a"
   tags = {
     Name        = "worker-2"
     Project     = "tera-kube-ans"
@@ -131,20 +131,21 @@ resource "aws_instance" "worker-2" {
   }
 }
 
-output kube-master-ip {
+output "kube-master-ip" {
   value       = aws_instance.kube-master.public_ip
   sensitive   = false
   description = "public ip of the kube-master"
 }
 
-output worker-1-ip {
+output "worker-1-ip" {
   value       = aws_instance.worker-1.public_ip
   sensitive   = false
   description = "public ip of the worker-1"
 }
 
-output worker-2-ip {
+output "worker-2-ip" {
   value       = aws_instance.worker-2.public_ip
   sensitive   = false
   description = "public ip of the worker-2"
 }
+
